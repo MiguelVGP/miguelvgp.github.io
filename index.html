@@ -484,7 +484,7 @@ const PROJECTS = [
     short: "Deteção automática em gravações de aves e morcegos, com o contorno de cada chamamento desenhado num espectrograma contínuo.",
     lede: "Uma aplicação web onde os biólogos carregam gravações de aves ou de ultrassons. O servidor corre os modelos de classificação e os resultados são revistos num espectrograma contínuo, com o contorno de cada chamamento desenhado por cima. Veio substituir uma aplicação de desktop difícil de instalar e de atualizar.",
     stack: ["Python","FastAPI","HTMX","SQLite","BirdNET","PyTorch","SciPy","librosa"],
-    facts: [["21","espécies de morcegos, classificadas por um conjunto de 6 modelos"],["≥ 96 kHz","gravações tratadas como ultrassons e reamostradas a 384 kHz"],["2 GiB","por ficheiro, com o áudio a ser enviado por partes"]],
+    facts: [["21","espécies de morcegos, classificadas por um conjunto de 6 modelos"],["≥ 96 kHz","gravações tratadas como ultrassons e reamostradas a 384 kHz"],["2 GB","por ficheiro, com o áudio a ser enviado por partes"]],
     problem: [
       "Os gravadores automáticos juntam centenas de horas de áudio por campanha. Os classificadores ajudam, mas alguém tem de ver e ouvir as deteções antes de irem para um relatório.",
       "Uma caixa de 3 segundos diz pouco sobre o chamamento. Para validar, é preciso ver onde está exatamente o sinal, no tempo e na frequência."
@@ -644,7 +644,7 @@ const PROJECTS_EN = {
     title: "Sound classification on the web, reviewed on a spectrogram",
     short: "Automatic detection in bird and bat recordings, with the outline of each call drawn on a continuous spectrogram.",
     lede: "A web app where biologists upload bird or ultrasound recordings. The server runs the classification models, and the results are reviewed on a continuous spectrogram with the outline of each call drawn on top. It replaced a desktop app that was hard to install and update.",
-    facts: [["21","bat species, classified by a set of 6 models"],["≥ 96 kHz","recordings treated as ultrasound and resampled to 384 kHz"],["2 GiB","per file, with audio streamed in chunks"]],
+    facts: [["21","bat species, classified by a set of 6 models"],["≥ 96 kHz","recordings treated as ultrasound and resampled to 384 kHz"],["2 GB","per file, with audio streamed in chunks"]],
     problem: [
       "Automatic recorders collect hundreds of hours of audio per campaign. Classifiers help, but someone still has to see and hear each detection before it goes into a report.",
       "A 3-second box says little about the call. To check it, you need to see exactly where the signal is in time and frequency."
