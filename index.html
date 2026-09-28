@@ -110,6 +110,16 @@ p{margin:0}
 .legend{display:flex; gap:14px; flex-wrap:wrap}
 .legend i{display:inline-block; width:10px; height:10px; border:1.5px solid; margin-right:6px; vertical-align:-1px}
 
+/* full-screen option for the animated panels */
+.fs-group{display:inline-flex; align-items:center; gap:10px}
+.fs-btn{display:inline-grid; place-items:center; width:24px; height:22px; padding:0; background:transparent; color:var(--panel-muted); border:1px solid #33413A; border-radius:4px; cursor:pointer; opacity:.75}
+.fs-btn:hover,.fs-btn:focus-visible{opacity:1; color:var(--panel-ink); border-color:var(--panel-muted)}
+.fs-btn svg{width:12px; height:12px}
+.no-fs .fs-btn{display:none}
+figure.scope:fullscreen{display:flex; flex-direction:column; justify-content:center; margin:0; max-width:none; border-radius:0; background:var(--panel); padding:24px max(24px, calc((100vw - (100vh - 150px) * 2.56) / 2))}
+figure.scope:-webkit-full-screen{display:flex; flex-direction:column; justify-content:center; margin:0; max-width:none; border-radius:0; background:var(--panel); padding:24px max(24px, calc((100vw - (100vh - 150px) * 2.56) / 2))}
+figure.scope:fullscreen .scope-head,figure.scope:fullscreen .scope-foot{font-size:.8rem}
+
 /* project reel under the hero */
 .reel-wrap{grid-column:1 / -1; min-width:0; margin-top:clamp(12px,2.4vw,28px)}
 .reel-head{display:flex; justify-content:space-between; gap:12px; color:var(--muted); margin-bottom:10px}
@@ -305,7 +315,7 @@ footer{padding-block:32px 48px; border-top:1px solid var(--line); display:flex; 
             <button type="button" role="tab" id="tab-vis" data-mode="vis" aria-selected="false" aria-controls="mode-vis" data-i18n="tab_vis">Imagem</button>
           </div>
           <span class="scope-status"><b class="rec">●</b> <span data-i18n="scope_title">Inferência em direto</span> · <span id="stat-som"><span id="detn" class="detn">0</span> <span data-i18n="scope_det">deteções</span></span><span id="stat-vis" hidden><span id="animn" class="detn">0</span> <span data-i18n="scope_anim">animais</span></span></span>
-          <span id="clock">00:00.0</span>
+          <span class="fs-group"><span id="clock">00:00.0</span><button class="fs-btn" type="button" data-fs><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 4.5V1h3.5M7.5 1H11v3.5M11 7.5V11H7.5M4.5 11H1V7.5"/></svg></button></span>
         </div>
         <div class="scope-body" id="mode-som" role="tabpanel" aria-labelledby="tab-som">
           <div class="yaxis" aria-hidden="true"><span>96</span><span>72</span><span>48</span><span>24</span><span>0 kHz</span></div>
@@ -753,12 +763,12 @@ const UI = {
   pt: { all: "Todas", project: "projeto", projects: "projetos", back: "← Projetos", nav: "Navegação", role: "Papel", year: "Ano",
         areas: "Áreas", stack: "Stack", sections: "Secções", s_problem: "Problema", s_flow: "Fluxo", s_dec: "Decisões técnicas",
         h_problem: "O problema", h_flow: "Como funciona", h_dec: "Decisões técnicas", h_stack: "Stack", others: "Outros projetos",
-        demo: "exemplo sintético", copy: "Copiar", copied: "Copiado", selected: "Selecionado", defRole: "Membro da equipa de desenvolvimento (dados e IA)",
+        demo: "exemplo sintético", fs: "Ver em ecrã inteiro", fsExit: "Sair do ecrã inteiro", copy: "Copiar", copied: "Copiado", selected: "Selecionado", defRole: "Membro da equipa de desenvolvimento (dados e IA)",
         title: "Miguel Paulo · Estação de Campo" },
   en: { all: "All", project: "project", projects: "projects", back: "← Projects", nav: "Breadcrumb", role: "Role", year: "Year",
         areas: "Areas", stack: "Stack", sections: "Sections", s_problem: "Problem", s_flow: "Pipeline", s_dec: "Technical decisions",
         h_problem: "The problem", h_flow: "How it works", h_dec: "Technical decisions", h_stack: "Stack", others: "Other projects",
-        demo: "synthetic example", copy: "Copy", copied: "Copied", selected: "Selected", defRole: "Development team member (data and AI)",
+        demo: "synthetic example", fs: "View full screen", fsExit: "Exit full screen", copy: "Copy", copied: "Copied", selected: "Selected", defRole: "Development team member (data and AI)",
         title: "Miguel Paulo · Field Station" }
 };
 
@@ -2670,7 +2680,7 @@ function renderCase(raw) {
       </dl>
     </div>
     ${CASE_ANIMS[p.slug] ? `<figure class="scope case-anim" aria-label="${esc(CASE_ANIMS[p.slug].cap[lang])}">
-      <div class="scope-head mono"><span class="scope-status"><b class="rec">●</b> ${esc(CASE_ANIMS[p.slug].cap[lang])}</span><span>${t("demo")}</span></div>
+      <div class="scope-head mono"><span class="scope-status"><b class="rec">●</b> ${esc(CASE_ANIMS[p.slug].cap[lang])}</span><span class="fs-group"><span>${t("demo")}</span><button class="fs-btn" type="button" data-fs><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 4.5V1h3.5M7.5 1H11v3.5M11 7.5V11H7.5M4.5 11H1V7.5"/></svg></button></span></div>
       <div class="stage"><canvas id="case-cv" width="1280" height="500"></canvas></div>
     </figure>` : ""}
     <div class="figs">${p.facts.map(([n, x]) => `<div class="fig"><b>${n}</b><span>${esc(x)}</span></div>`).join("")}</div>
@@ -2715,7 +2725,7 @@ function route(keepScroll) {
   if (p) {
     renderCase(p);
     $("#home-view").hidden = true; $("#case-view").hidden = false;
-    startCaseAnim(p.slug);
+    startCaseAnim(p.slug); updateFsLabels();
     document.title = L(p).title + " · Miguel Paulo";
     if (keepScroll !== true) window.scrollTo(0, 0);
   } else {
@@ -2751,8 +2761,28 @@ function renderReel() {
   };
   requestAnimationFrame(frame);
 })();
+/* Full screen for the animated panels */
+const fsSupported = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+if (!fsSupported) document.documentElement.classList.add("no-fs");
+const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+function updateFsLabels() {
+  document.querySelectorAll("[data-fs]").forEach(b => {
+    const on = fsElement() === b.closest("figure");
+    b.setAttribute("aria-label", on ? t("fsExit") : t("fs")); b.title = on ? t("fsExit") : t("fs");
+  });
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-fs]"); if (!b) return;
+  const fig = b.closest("figure");
+  try {
+    if (fsElement()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else { const r = (fig.requestFullscreen || fig.webkitRequestFullscreen).call(fig); if (r && r.catch) r.catch(() => {}); }
+  } catch (err) {}
+});
+document.addEventListener("fullscreenchange", updateFsLabels);
+document.addEventListener("webkitfullscreenchange", updateFsLabels);
 function renderAll(keepScroll) {
-  applyStatic(); renderAreas(); renderFilters(); renderRegistry(); renderSkills(); renderContact(); renderReel(); route(keepScroll);
+  applyStatic(); renderAreas(); renderFilters(); renderRegistry(); renderSkills(); renderContact(); renderReel(); route(keepScroll); updateFsLabels();
 }
 document.querySelector(".lang").addEventListener("click", e => {
   const b = e.target.closest("button[data-lang]"); if (!b || b.dataset.lang === lang) return;
